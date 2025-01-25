@@ -84,7 +84,7 @@ const logout = async(req, res) => {
         // remover o refreshtoken do banco de dados
         const user = await User.findOneAndUpdate(
             { refreshToken },
-            { refreshToken: null }
+            { $set: { refreshToken: null } }
         )
         if(!user){
             return res.status(403).json({ message: "Usuário não encontrado" });
@@ -107,8 +107,8 @@ const refreshToken = async (req, res) => {
         if (!user) {
             return res.status(403).json({ message: "Refresh token inválido ou não encontrado no banco de dados" });
         }
-        const newAccessToken = jwt.sign({ userId: decoded.userId }, JWT_SECRET, { expiresIn: "2h" });
-        const newRefreshToken = jwt.sign({ userId: decoded.userId }, REFRESH_SECRET, { expiresIn: "2d" });
+        const newAccessToken = generateAcessToken(decoded.userId);
+        const newRefreshToken = generateRefreshToken(decoded.userId);
         res.json({ accessToken: newAccessToken, refreshToken: newRefreshToken });
     } catch (error) {
         console.error("Erro ao validar refresh token:", error);

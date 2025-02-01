@@ -7,7 +7,7 @@ const transactionSchema = new mongoose.Schema(
       type: { type: String, enum: ["receita", "despesa"], required: true },
       category_id: { type: mongoose.Schema.Types.ObjectId, ref: "Categoria", required: true },
       description: { type: String, required: true },
-      transaction_date: { type: Date, required: true },
+      transaction_date: { type: Date, default: Date.now },
       deletedAt: { type: Date, default: null }  // 🔹 Adicionando o campo para soft delete
     },
     { timestamps: true }  

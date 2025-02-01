@@ -15,7 +15,7 @@ const getTransaction = async (req, res) => {
 
 const postTransaction = async (req, res) => {
     try {
-        const { amount, type, category_id, description } = req.body;
+        const { amount, type, category_id, description, transaction_date } = req.body;
         const user_id = req.user.userId;  // O user_id vem do token
         if (!user_id || !amount || !type || !category_id || !description) {
             return res.status(400).json({ message: "Por favor, forneça todos os campos" });
@@ -24,12 +24,15 @@ const postTransaction = async (req, res) => {
         if (!mongoose.Types.ObjectId.isValid(category_id)) {
             return res.status(400).json({ message: "category_id inválido" });
         }
+        // Se transaction_date não for fornecido, atribui a data atual
+        const transactionDate = transaction_date || new Date(); 
         const transaction = new Transaction({
             user_id,
             amount,
             type,
             category_id: new mongoose.Types.ObjectId(category_id),  // Converte para ObjectId
-            description
+            description,
+            transaction_date: transactionDate,
         });
         await transaction.save();
         res.status(201).json({ message: "Transação criada com sucesso.", transaction });

@@ -43,6 +43,10 @@ const putTransaction = async (req, res) => {
     try {
         const { id } = req.params;  // Recebe o ID da transação a ser atualizada
         const { amount, type, category_id, description } = req.body; // Dados para atualização
+        // Verifica se o ID é válido
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ message: "ID inválido" });
+        }
         // Verifica se os campos obrigatórios foram fornecidos
         if (!amount || !type || !category_id || !description) {
             return res.status(400).json({ message: "Por favor, forneça todos os campos" });
@@ -70,12 +74,16 @@ const putTransaction = async (req, res) => {
 
 const deleteTransaction = async (req, res) => {
     const { id } = req.params
+    // Verifica se o ID é válido
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ message: "ID inválido" });
+    }
     try {
         const deleteTransaction = await Transaction.findByIdAndDelete(id)
         if(!deleteTransaction){
             return res.status(404).json({message: "Transação não encontrada"})
         }
-        res.status(204).send()
+        res.status(200).json({ message: "Transação excluída com sucesso" });
     }catch (error){
         res.status(500).json({ message: "Erro ao deletar transação", error })
     }

@@ -22,8 +22,8 @@ router.get("/categories", getCategories)
 router.post("/categories", postCategory)
 router.delete("/categories/:id", deleteCategory)
 
-router.get("/reports/monthly", getMonthlyReport)
-router.get("/reports/custom", getCustomReport)
+router.get("/reports/monthly", authenticationToken, getMonthlyReport)
+router.get("/reports/custom", authenticationToken, getCustomReport)
 
 
 

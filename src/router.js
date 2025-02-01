@@ -5,7 +5,7 @@ const userTransactions = require("./controllers/transactionsController")
 const userCategory = require("./models/categoryDB")
 const { authenticationToken } = require("./middlewares/userMiddlewares");
 const { getProfile, getCategories, postCategory, deleteCategory } = require("./controllers/categoriesController");
-
+const { getMonthlyReport, getCustomReport } = require("./controllers/reportsController")
 
 router.post("/register", userController.register)
 router.post("/login", userController.login)
@@ -21,6 +21,9 @@ router.delete("/transactions/:id", authenticationToken, userTransactions.deleteT
 router.get("/categories", getCategories)
 router.post("/categories", postCategory)
 router.delete("/categories/:id", deleteCategory)
+
+router.get("/reports/monthly", getMonthlyReport)
+router.get("/reports/custom", getCustomReport)
 
 
 
